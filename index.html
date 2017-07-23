@@ -2,9 +2,39 @@
 <html>
   <head>
    <title>TEST Document</title>
+   <style>
+     html,body { background: black; margin: 0; overflow: hidden;}
+    </style>
  <head>
  <body>
-
+<p data-height="265" data-theme-id="0" data-slug-hash="jLNepq" data-default-tab="result" data-user="Alca" data-embed-version="2" data-pen-title="jLNepq" class="codepen">See the Pen <a href="https://codepen.io/Alca/pen/jLNepq/">jLNepq</a> by Jacob Foster (<a href="https://codepen.io/Alca">@Alca</a>) on <a href="https://codepen.io">CodePen</a>.</p><script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+<script>
+  let canvas, ctx;
+let particles = [];
+function setup() { canvas = createCanvas(windowWidth, windowHeight); ctx = canvas.drawingContext;  let count = 40; let t = 1 / count; let time = 600 * t; let tau = TAU * t; let h = 360 * t; for(let i = 0; i < count; i++) {  // let t = i / count;  let acc = createVector(30, 0);  acc.rotate(i * tau);  let particle = new Particle({    acc,    r: 4,    hue: i * h   });  setTimeout(() => particles.push(particle), i * time); }}
+function draw() { // background(0); fill(0, 10); noStroke(); rect(0, 0, width, height);  noFill();  translate(width / 2, height / 2);  // let gravity = createVector(0, 0); let steps = 40; let stepScl = 1 / steps; particles.forEach(p => {  // p.applyForce(gravity);  for(let i = 0; i < steps; i++) {   p.draw();   p.update(stepScl);  }  p.walls();  // p.edges(); });}
+function windowResized() { resizeCanvas(windowWidth, windowHeight);}
+class Particle { constructor(_ = {}) {  this.opts = _;  this.pos = 'pos' in _ ? _.pos.copy() : createVector(0, 0);  this.lastPos = 'lastPos' in _ ? _.lastPos.copy() : this.pos.copy();  this.acc = 'acc' in _ ? _.acc.copy() : createVector(0, 0);  this.vel = 'vel' in _ ? _.vel.copy() : createVector(0, 0);  this.r = 'r' in _ ? _.r : 4;  this.hue = 'hue' in _ ? _.hue : 0; } get d() {  return this.r * 2; } applyForce(...force) {  this.acc.add(...force); } update(scl = 1) {  let { pos, lastPos, vel, acc } = this;  let { x, y } = pos;  lastPos.set(x, y);  vel.add(acc.copy().mult(scl));  acc.set(0, 0);  vel.mult(1 - (0.005 * scl));  pos.add(vel); } // isOutside() { //  let { d, r, lastPos, pos } = this; //  let { x, y } = pos; //  let w = width / 2; //  let h = height / 2; //  return { //    x: Math.abs(x + r) > w ? x + r - w : 0, //    y: Math.abs(y + r) > h ? y + r - h : 0 //   }; // } walls() {  let { d, r, pos, vel } = this;  let { x, y } = pos;  let w = width / 2;  let h = height / 2;  if(x - r < -w || x + r > w) {   vel.x *= -1;  }  if(y - r < -h || y + r > h) {   vel.y *= -1;  }  // TODO: they need to gain the amount they go outside of the walls } edges() {  let { d, r, lastPos, pos } = this;  let { x, y } = pos;  let xd = 0;  let yd = 0;  let w = width / 2;  let h = height / 2;  if(x + r < -w) {   xd += width + d;  }  else if(x - r > w) {   xd -= width + d;  }  if(y + r < -h) {   yd += height + d;  }  else if(y - r > h) {   yd -= height + d;  }  if(xd || yd) {   this.lastPos.add(xd, yd);   this.pos.add(xd, yd);   return true;  }  return false; } draw() {  let { d, lastPos: { x: x_, y: y_ }, pos: { x, y }, hue } = this;  ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;  // ellipse(x, y, d);  ctx.beginPath();  ctx.moveTo(x_, y_);  ctx.lineTo(x, y);  ctx.lineWidth = d;  ctx.stroke(); }}
+  </script>
    <h1>OJ Was Innocent</h1>
    <p>What if I told you he wasn't the greatest... Jonnie Cochran was...</p>
  <body>
